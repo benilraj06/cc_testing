@@ -1,6 +1,6 @@
 # CLAUDE.md: notes for working on Pocketknife
 
-Pocketknife is an installable, offline-first PWA: 20 small browser tools (hashing, encoding, generators, converters, text utilities, device sensors). Plain HTML/CSS/JS with **no build step, no framework and no npm dependencies at runtime**. It's hosted on GitHub Pages from `main`: https://benilraj06.github.io/cc_testing/
+Pocketknife is an installable, offline-first PWA: 21 small browser tools (hashing, encoding, generators, converters, text utilities, device sensors). Plain HTML/CSS/JS with **no build step, no framework and no npm dependencies at runtime**. It's hosted on GitHub Pages from `main`: https://benilraj06.github.io/cc_testing/
 
 Read this before changing anything. The "Lessons learned" section records real bugs from this project's history.
 
@@ -161,5 +161,6 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 12. New **Device** category with the GPS Location tool.
 13. Compass tool (Device): iOS `webkitCompassHeading` or Android absolute orientation, smoothed needle that turns the short way past north.
 14. Share button beside Star on every tool page (Web Share API, falling back to copying the link).
+15. Screen Flashlight tool (Device): full-screen light with steady, SOS (Morse timing) and strobe modes, colours, brightness, fullscreen and screen wake lock.
 
-Current version: **16** (see `sw.js`).
+Current version: **17** (see `sw.js`).

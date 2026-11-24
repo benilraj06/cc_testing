@@ -1,6 +1,6 @@
 # Pocketknife
 
-**Small tools. Sharp results.** Pocketknife is a set of 20 handy developer, text and device tools that run entirely in your browser. Nothing you type or upload ever leaves your device, and once installed it works offline.
+**Small tools. Sharp results.** Pocketknife is a set of 21 handy developer, text and device tools that run entirely in your browser. Nothing you type or upload ever leaves your device, and once installed it works offline.
 
 **Live:** https://benilraj06.github.io/cc_testing/
 
@@ -12,7 +12,7 @@
 | **Generate** | Password Generator · UUID Generator (v4 / v7) · QR Code Maker · Lorem Ipsum |
 | **Convert & Format** | JSON Formatter · Timestamp Converter · Number Base Converter · Color Converter · Case Converter |
 | **Text** | Text Diff · Word Counter · Regex Tester |
-| **Device** | GPS Location (live coordinates, accuracy, altitude, speed, heading) · Compass |
+| **Device** | GPS Location (live coordinates, accuracy, altitude, speed, heading) · Compass · Screen Flashlight (steady, SOS, strobe) |
 
 ## Features
 
