@@ -37,7 +37,7 @@ function showApp() {
   apps.forEach((s) => { s.hidden = s !== target; });
   links.forEach((a) => a.classList.toggle('active', a.dataset.app === target.dataset.app));
   topbarTitle.textContent = target.dataset.title;
-  document.title = target.dataset.app === 'home' ? 'Toolbox' : `${target.dataset.title} · Toolbox`;
+  document.title = target.dataset.app === 'home' ? 'Pocketknife' : `${target.dataset.title} · Pocketknife`;
   setNavOpen(false);
 }
 

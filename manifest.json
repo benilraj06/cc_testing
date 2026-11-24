@@ -1,6 +1,6 @@
 {
-  "name": "Toolbox",
-  "short_name": "Toolbox",
+  "name": "Pocketknife",
+  "short_name": "Pocketknife",
   "description": "Handy tools that run entirely in your browser.",
   "start_url": "./",
   "scope": "./",
