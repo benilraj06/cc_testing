@@ -1,0 +1,4 @@
+# Test output and local tooling
+tests/output/
+node_modules/
+.DS_Store
