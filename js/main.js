@@ -1,35 +1,63 @@
 // Builds the sidebar, home tiles and app pages from PK.apps, then handles
-// navigation, home search, offline support and the install popup.
+// starred and recent tools, navigation, home search, offline support and
+// the install popup.
 (function () {
   const { apps, CATEGORIES, icon, escapeHTML } = PK;
+  const byId = Object.fromEntries(apps.map((a) => [a.id, a]));
+  const navStarred = document.getElementById('navStarred');
   const navGroups = document.getElementById('navGroups');
   const homeGroups = document.getElementById('homeGroups');
+  const homeStarred = document.getElementById('homeStarred');
+  const homeRecent = document.getElementById('homeRecent');
   const content = document.getElementById('content');
+
+  // ---------- Saved preferences (this browser only) ----------
+  const STAR_KEY = 'pk.starred';
+  const RECENT_KEY = 'pk.recent';
+  const RECENT_MAX = 6;
+  function load(key) {
+    try {
+      const v = JSON.parse(localStorage.getItem(key));
+      return Array.isArray(v) ? v.filter((id) => byId[id]) : [];
+    } catch { return []; }
+  }
+  function save(key, list) {
+    try { localStorage.setItem(key, JSON.stringify(list)); } catch {}
+  }
+  let starred = load(STAR_KEY);
+  let recent = load(RECENT_KEY);
+
+  // ---------- Markup builders ----------
+  const navLink = (a) => `
+    <li><a href="#${a.id}" data-app="${a.id}">
+      <span class="nav-icon">${icon(a.icon)}</span><span class="nav-label">${escapeHTML(a.title)}</span>
+    </a></li>`;
+
+  const starButton = (a, cls) =>
+    `<button class="${cls}" type="button" data-star="${a.id}" aria-pressed="false" aria-label="Star ${escapeHTML(a.title)}" title="Star">${icon('i-star')}</button>`;
+
+  const tile = (a) => `
+    <div class="tile-wrap" data-search="${escapeHTML((a.title + ' ' + a.desc + ' ' + (a.keywords || '')).toLowerCase())}">
+      <a class="tile" href="#${a.id}">
+        <span class="tile-icon">${icon(a.icon)}</span>
+        <span class="tile-title">${escapeHTML(a.title)}</span>
+        <span class="tile-desc">${escapeHTML(a.desc)}</span>
+        ${icon('i-arrow', 'tile-arrow')}
+      </a>
+      ${starButton(a, 'tile-star')}
+    </div>`;
 
   // ---------- Build navigation, tiles and pages ----------
   for (const cat of CATEGORIES) {
     const list = apps.filter((a) => a.category === cat);
     if (!list.length) continue;
-
     navGroups.insertAdjacentHTML('beforeend', `
       <div class="nav-section">${escapeHTML(cat)}</div>
-      <ul class="nav-list">${list.map((a) => `
-        <li><a href="#${a.id}" data-app="${a.id}">
-          <span class="nav-icon">${icon(a.icon)}</span><span class="nav-label">${escapeHTML(a.title)}</span>
-        </a></li>`).join('')}
-      </ul>`);
-
+      <ul class="nav-list">${list.map(navLink).join('')}</ul>`);
     homeGroups.insertAdjacentHTML('beforeend', `
       <section class="tile-group" data-group>
         <h2 class="group-title">${escapeHTML(cat)}</h2>
-        <div class="tiles">${list.map((a) => `
-          <a class="tile" href="#${a.id}" data-search="${escapeHTML((a.title + ' ' + a.desc + ' ' + (a.keywords || '')).toLowerCase())}">
-            <span class="tile-icon">${icon(a.icon)}</span>
-            <span class="tile-title">${escapeHTML(a.title)}</span>
-            <span class="tile-desc">${escapeHTML(a.desc)}</span>
-            ${icon('i-arrow', 'tile-arrow')}
-          </a>`).join('')}
-        </div>
+        <div class="tiles">${list.map(tile).join('')}</div>
       </section>`);
   }
 
@@ -41,7 +69,10 @@
     section.hidden = true;
     section.innerHTML = `
       <header class="page-head">
-        <h1>${escapeHTML(app.title)}</h1>
+        <div class="page-title-row">
+          <h1>${escapeHTML(app.title)}</h1>
+          <button class="star-toggle" type="button" data-star="${app.id}" aria-pressed="false">${icon('i-star')}<span>Star</span></button>
+        </div>
         <p>${escapeHTML(app.desc)}</p>
       </header>
       ${app.html}`;
@@ -54,25 +85,87 @@
     }
   }
 
+  // ---------- Starred and recent ----------
+  function renderStarred() {
+    const list = starred.map((id) => byId[id]);
+    navStarred.hidden = !list.length;
+    navStarred.innerHTML = list.length
+      ? `<div class="nav-section">Starred</div><ul class="nav-list">${list.map(navLink).join('')}</ul>`
+      : '';
+    homeStarred.querySelector('.tiles').innerHTML = list.map(tile).join('');
+    // Reflect the state on every star button (pages and tiles).
+    document.querySelectorAll('[data-star]').forEach((btn) => {
+      const on = starred.includes(btn.dataset.star);
+      btn.classList.toggle('on', on);
+      btn.setAttribute('aria-pressed', String(on));
+      const title = byId[btn.dataset.star].title;
+      if (btn.classList.contains('tile-star')) {
+        btn.setAttribute('aria-label', `${on ? 'Unstar' : 'Star'} ${title}`);
+        btn.title = on ? 'Unstar' : 'Star';
+      } else {
+        btn.querySelector('span').textContent = on ? 'Starred' : 'Star';
+      }
+    });
+    markActive();
+    updateHomeSections();
+  }
+
+  function renderRecent() {
+    homeRecent.querySelector('.tiles').innerHTML = recent.map((id) => tile(byId[id])).join('');
+    renderStarred(); // new tiles need their star state
+  }
+
+  function toggleStar(id) {
+    starred = starred.includes(id) ? starred.filter((x) => x !== id) : [...starred, id];
+    save(STAR_KEY, starred);
+    renderStarred();
+  }
+
+  function addRecent(id) {
+    recent = [id, ...recent.filter((x) => x !== id)].slice(0, RECENT_MAX);
+    save(RECENT_KEY, recent);
+  }
+
+  // One listener handles star buttons everywhere, including re-rendered tiles.
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-star]');
+    if (!btn) return;
+    e.preventDefault();
+    toggleStar(btn.dataset.star);
+  });
+
+  document.getElementById('recentClear').addEventListener('click', () => {
+    recent = [];
+    save(RECENT_KEY, recent);
+    renderRecent();
+  });
+
   // ---------- Navigation (hash-based: #home, #md5, ...) ----------
   const sections = document.querySelectorAll('section[data-app]');
-  const links = document.querySelectorAll('.nav-list a[data-app]');
   const topbarTitle = document.getElementById('topbarTitle');
+  let current = 'home';
+
+  function markActive() {
+    document.querySelectorAll('.nav-list a[data-app]').forEach((a) => {
+      const on = a.dataset.app === current;
+      a.classList.toggle('active', on);
+      if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+  }
 
   function showApp() {
     const id = location.hash.slice(1);
     const target = [...sections].find((s) => s.dataset.app === id) || sections[0];
     const changed = target.hidden;
+    current = target.dataset.app;
     sections.forEach((s) => { s.hidden = s !== target; });
-    links.forEach((a) => {
-      const on = a.dataset.app === target.dataset.app;
-      a.classList.toggle('active', on);
-      if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
-    });
+    markActive();
     topbarTitle.textContent = target.dataset.title;
-    document.title = target.dataset.app === 'home' ? 'Pocketknife' : `${target.dataset.title} · Pocketknife`;
+    document.title = current === 'home' ? 'Pocketknife' : `${target.dataset.title} · Pocketknife`;
     if (changed) window.scrollTo(0, 0);
-    const app = apps.find((a) => a.id === target.dataset.app);
+    if (current === 'home') renderRecent();
+    else addRecent(current);
+    const app = byId[current];
     if (app && app.onShow) app.onShow();
     setNavOpen(false);
   }
@@ -87,31 +180,42 @@
   document.getElementById('backdrop').addEventListener('click', () => setNavOpen(false));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setNavOpen(false); });
   window.addEventListener('hashchange', showApp);
-  showApp();
 
   // ---------- Home search ----------
   const search = document.getElementById('homeSearch');
   const empty = document.getElementById('homeEmpty');
+  const searching = () => search.value.trim() !== '';
+
+  // Starred/Recent are shortcuts; hide them while searching to avoid duplicates.
+  function updateHomeSections() {
+    homeStarred.hidden = searching() || !starred.length;
+    homeRecent.hidden = searching() || !recent.length;
+  }
+
   search.addEventListener('input', () => {
     const terms = search.value.toLowerCase().split(/\s+/).filter(Boolean);
     let any = false;
     document.querySelectorAll('[data-group]').forEach((group) => {
       let groupHas = false;
-      group.querySelectorAll('.tile').forEach((tile) => {
-        const match = terms.every((t) => tile.dataset.search.includes(t));
-        tile.hidden = !match;
+      group.querySelectorAll('.tile-wrap').forEach((wrap) => {
+        const match = terms.every((t) => wrap.dataset.search.includes(t));
+        wrap.hidden = !match;
         groupHas = groupHas || match;
       });
       group.hidden = !groupHas;
       any = any || groupHas;
     });
     empty.hidden = any;
+    updateHomeSections();
   });
   search.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter') return;
-    const first = document.querySelector('#homeGroups .tile:not([hidden])');
+    const first = document.querySelector('#homeGroups .tile-wrap:not([hidden]) .tile');
     if (first) location.hash = first.getAttribute('href');
   });
+
+  showApp();
+  renderStarred();
 
   // ---------- Offline support ----------
   if ('serviceWorker' in navigator) {

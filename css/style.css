@@ -367,6 +367,83 @@ textarea:focus {
 }
 .empty { color: var(--muted); }
 
+/* ---------- Stars + recent ---------- */
+:root { --star: #f5a524; }
+.tile-wrap { position: relative; display: flex; }
+.tile-wrap > .tile { flex: 1; }
+.tile-arrow { top: auto; bottom: 18px; }
+.tile-star {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.15s, background 0.15s, color 0.15s, transform 0.15s;
+}
+.tile-star .ico { width: 18px; height: 18px; }
+.tile-wrap:hover .tile-star, .tile-star:focus-visible { opacity: 1; }
+.tile-star:hover { background: var(--surface-2); color: var(--star); }
+.tile-star.on { opacity: 1; color: var(--star); }
+.tile-star.on .ico, .star-toggle.on .ico { fill: currentColor; }
+.tile-star:active, .star-toggle:active { transform: scale(0.9); }
+@media (hover: none) { .tile-star { opacity: 0.8; } }
+
+.page-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 4px; }
+.page-title-row h1 { margin: 0; }
+.star-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s, transform 0.15s;
+}
+.star-toggle .ico { width: 15px; height: 15px; }
+.star-toggle:hover { border-color: var(--star); color: var(--star); }
+.star-toggle.on { border-color: color-mix(in srgb, var(--star) 55%, var(--border)); background: color-mix(in srgb, var(--star) 12%, var(--surface)); color: #b7791f; }
+@media (prefers-color-scheme: dark) { .star-toggle.on { color: var(--star); } }
+
+/* Compact shortcut tiles on phones: two per row, icon + name only */
+@media (max-width: 800px) {
+  #homeStarred .tiles, #homeRecent .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  #homeStarred .tile, #homeRecent .tile { padding: 14px; }
+  #homeStarred .tile-icon, #homeRecent .tile-icon { width: 36px; height: 36px; margin-bottom: 8px; border-radius: 10px; }
+  #homeStarred .tile-desc, #homeRecent .tile-desc, #homeStarred .tile-arrow, #homeRecent .tile-arrow { display: none; }
+  #homeStarred .tile-title, #homeRecent .tile-title { font-size: 0.92rem; line-height: 1.3; padding-right: 22px; }
+  #homeStarred .tile-star, #homeRecent .tile-star { top: 8px; right: 6px; }
+}
+
+.link-btn {
+  margin-left: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--accent-text);
+  cursor: pointer;
+}
+.link-btn:hover { text-decoration: underline; }
+
 /* ---------- Form controls ---------- */
 .input {
   width: 100%;

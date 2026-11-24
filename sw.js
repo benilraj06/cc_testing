@@ -3,7 +3,7 @@
 // fall back to the saved copy when offline.
 // On each release, bump VERSION here and the matching ?v= in index.html, so
 // browsers never pair a new page with old cached CSS or JS.
-const VERSION = 10;
+const VERSION = 11;
 const CACHE = 'pocketknife-v' + VERSION;
 const APP_FILES = [
   'md5', 'sha', 'base64', 'url', 'jwt', 'hex',

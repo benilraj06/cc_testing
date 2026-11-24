@@ -8,7 +8,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="stylesheet" href="css/style.css?v=10">
+  <link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
   <!-- Reusable line icons -->
@@ -26,7 +26,8 @@
     <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M7 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1"/></symbol>
     <symbol id="i-plus-square" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/></symbol>
     <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
-    <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5M12 13v8"/></symbol>
+    <symbol id="i-knife" viewBox="0 0 24 24"><g transform="translate(1.6 0.4)"><rect x="1.5" y="13.5" width="13" height="5" rx="2.5" transform="rotate(-35 8 16)"/><path d="M12.4 12 13.2 2.6c3 2.2 4.3 5.6 2.9 8.7l-2.4.9"/><circle cx="12.3" cy="12.3" r=".9" fill="currentColor"/></g></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></symbol>
     <!-- Apps -->
     <symbol id="i-hash" viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></symbol>
@@ -57,12 +58,14 @@
 
   <nav class="sidebar" id="sidebar" aria-label="Applications">
     <a class="brand" href="#home">
-      <span class="brand-logo"><svg class="ico"><use href="#i-box"/></svg></span>
+      <span class="brand-logo"><svg class="ico"><use href="#i-knife"/></svg></span>
       <span class="brand-name">Pocketknife</span>
     </a>
     <ul class="nav-list">
       <li><a href="#home" data-app="home"><span class="nav-icon"><svg class="ico"><use href="#i-home"/></svg></span><span class="nav-label">Home</span></a></li>
     </ul>
+    <!-- Starred tools (filled by js/main.js) -->
+    <div id="navStarred" hidden></div>
     <!-- App links are generated from js/apps/*.js -->
     <div id="navGroups"></div>
     <div class="sidebar-foot"><span class="dot"></span>Runs locally · works offline</div>
@@ -79,6 +82,15 @@
         <svg class="ico"><use href="#i-search"/></svg>
         <input type="search" id="homeSearch" placeholder="Search tools…" aria-label="Search tools" autocomplete="off">
       </label>
+      <!-- Starred and recently used tools (filled by js/main.js) -->
+      <section class="tile-group" id="homeStarred" hidden>
+        <h2 class="group-title">Starred</h2>
+        <div class="tiles"></div>
+      </section>
+      <section class="tile-group" id="homeRecent" hidden>
+        <h2 class="group-title">Recent <button class="link-btn" id="recentClear" type="button">Clear</button></h2>
+        <div class="tiles"></div>
+      </section>
       <!-- Tiles are generated from js/apps/*.js -->
       <div id="homeGroups"></div>
       <p class="empty" id="homeEmpty" hidden>No tools match your search.</p>
@@ -112,32 +124,32 @@
     Scripts. On each release bump every ?v= here and VERSION in sw.js.
     To add an app: create js/apps/<name>.js, add it below and to APP_FILES in sw.js.
   -->
-  <script src="js/md5.js?v=10"></script>
-  <script src="js/vendor/qrcode.js?v=10"></script>
-  <script src="js/core.js?v=10"></script>
+  <script src="js/md5.js?v=11"></script>
+  <script src="js/vendor/qrcode.js?v=11"></script>
+  <script src="js/core.js?v=11"></script>
   <!-- Hash & Encode -->
-  <script src="js/apps/md5.js?v=10"></script>
-  <script src="js/apps/sha.js?v=10"></script>
-  <script src="js/apps/base64.js?v=10"></script>
-  <script src="js/apps/url.js?v=10"></script>
-  <script src="js/apps/jwt.js?v=10"></script>
-  <script src="js/apps/hex.js?v=10"></script>
+  <script src="js/apps/md5.js?v=11"></script>
+  <script src="js/apps/sha.js?v=11"></script>
+  <script src="js/apps/base64.js?v=11"></script>
+  <script src="js/apps/url.js?v=11"></script>
+  <script src="js/apps/jwt.js?v=11"></script>
+  <script src="js/apps/hex.js?v=11"></script>
   <!-- Generate -->
-  <script src="js/apps/password.js?v=10"></script>
-  <script src="js/apps/uuid.js?v=10"></script>
-  <script src="js/apps/qr.js?v=10"></script>
-  <script src="js/apps/lorem.js?v=10"></script>
+  <script src="js/apps/password.js?v=11"></script>
+  <script src="js/apps/uuid.js?v=11"></script>
+  <script src="js/apps/qr.js?v=11"></script>
+  <script src="js/apps/lorem.js?v=11"></script>
   <!-- Convert & Format -->
-  <script src="js/apps/json.js?v=10"></script>
-  <script src="js/apps/timestamp.js?v=10"></script>
-  <script src="js/apps/numbase.js?v=10"></script>
-  <script src="js/apps/color.js?v=10"></script>
-  <script src="js/apps/case.js?v=10"></script>
+  <script src="js/apps/json.js?v=11"></script>
+  <script src="js/apps/timestamp.js?v=11"></script>
+  <script src="js/apps/numbase.js?v=11"></script>
+  <script src="js/apps/color.js?v=11"></script>
+  <script src="js/apps/case.js?v=11"></script>
   <!-- Text -->
-  <script src="js/apps/diff.js?v=10"></script>
-  <script src="js/apps/wordcount.js?v=10"></script>
-  <script src="js/apps/regex.js?v=10"></script>
+  <script src="js/apps/diff.js?v=11"></script>
+  <script src="js/apps/wordcount.js?v=11"></script>
+  <script src="js/apps/regex.js?v=11"></script>
   <!-- Must be last: builds navigation from the registered apps -->
-  <script src="js/main.js?v=10"></script>
+  <script src="js/main.js?v=11"></script>
 </body>
 </html>
