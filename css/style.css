@@ -429,6 +429,45 @@ textarea:focus {
   #homeStarred .tile-star, #homeRecent .tile-star { top: 8px; right: 6px; }
 }
 
+/* Collapsible group headings (sidebar + home) */
+.group-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  border: none;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.group-toggle:hover { color: var(--text); }
+.group-toggle .chev { width: 14px; height: 14px; transition: transform 0.2s ease; }
+.collapsed .group-toggle .chev { transform: rotate(-90deg); }
+/* Sidebar headings span the full width with the chevron at the right */
+.nav-section.group-toggle {
+  display: flex;
+  width: calc(100% - 20px);
+  justify-content: space-between;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.nav-section.group-toggle:hover { color: var(--text); }
+.nav-section.group-toggle .chev { opacity: 0; }
+.sidebar:hover .nav-section.group-toggle .chev,
+.nav-section.group-toggle:focus-visible .chev,
+.collapsed > .nav-section.group-toggle .chev { opacity: 1; }
+@media (hover: none) { .nav-section.group-toggle .chev { opacity: 1; } }
+.tile-group.collapsed { margin-bottom: 16px; }
+.tile-group.collapsed .group-title { margin-bottom: 0; }
+
 .link-btn {
   margin-left: 8px;
   padding: 0;

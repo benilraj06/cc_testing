@@ -10,6 +10,7 @@
   const homeStarred = document.getElementById('homeStarred');
   const homeRecent = document.getElementById('homeRecent');
   const content = document.getElementById('content');
+  const searchBox = document.getElementById('homeSearch');
 
   // ---------- Saved preferences (this browser only) ----------
   const STAR_KEY = 'pk.starred';
@@ -28,6 +29,11 @@
   let recent = load(RECENT_KEY);
 
   // ---------- Markup builders ----------
+  // A collapsible group heading. key is stable ("nav:Generate", "home:Recent").
+  const groupToggle = (key, label, cls = 'group-toggle') =>
+    `<button class="${cls}" type="button" data-collapse="${escapeHTML(key)}" aria-expanded="true">` +
+    `<span>${escapeHTML(label)}</span>${icon('i-chevron', 'chev')}</button>`;
+
   const navLink = (a) => `
     <li><a href="#${a.id}" data-app="${a.id}">
       <span class="nav-icon">${icon(a.icon)}</span><span class="nav-label">${escapeHTML(a.title)}</span>
@@ -52,12 +58,14 @@
     const list = apps.filter((a) => a.category === cat);
     if (!list.length) continue;
     navGroups.insertAdjacentHTML('beforeend', `
-      <div class="nav-section">${escapeHTML(cat)}</div>
-      <ul class="nav-list">${list.map(navLink).join('')}</ul>`);
+      <div class="nav-group" data-collapsible>
+        ${groupToggle('nav:' + cat, cat, 'nav-section group-toggle')}
+        <ul class="nav-list" data-collapse-body>${list.map(navLink).join('')}</ul>
+      </div>`);
     homeGroups.insertAdjacentHTML('beforeend', `
-      <section class="tile-group" data-group>
-        <h2 class="group-title">${escapeHTML(cat)}</h2>
-        <div class="tiles">${list.map(tile).join('')}</div>
+      <section class="tile-group" data-group data-collapsible>
+        <h2 class="group-title">${groupToggle('home:' + cat, cat)}</h2>
+        <div class="tiles" data-collapse-body>${list.map(tile).join('')}</div>
       </section>`);
   }
 
@@ -90,8 +98,10 @@
     const list = starred.map((id) => byId[id]);
     navStarred.hidden = !list.length;
     navStarred.innerHTML = list.length
-      ? `<div class="nav-section">Starred</div><ul class="nav-list">${list.map(navLink).join('')}</ul>`
+      ? `<div class="nav-group" data-collapsible>${groupToggle('nav:Starred', 'Starred', 'nav-section group-toggle')}
+          <ul class="nav-list" data-collapse-body>${list.map(navLink).join('')}</ul></div>`
       : '';
+    applyCollapsed();
     homeStarred.querySelector('.tiles').innerHTML = list.map(tile).join('');
     // Reflect the state on every star button (pages and tiles).
     document.querySelectorAll('[data-star]').forEach((btn) => {
@@ -138,6 +148,36 @@
     recent = [];
     save(RECENT_KEY, recent);
     renderRecent();
+  });
+
+  // ---------- Collapsible groups ----------
+  const COLLAPSE_KEY = 'pk.collapsed';
+  let collapsed;
+  try {
+    const v = JSON.parse(localStorage.getItem(COLLAPSE_KEY));
+    collapsed = new Set(Array.isArray(v) ? v : []);
+  } catch { collapsed = new Set(); }
+
+  function applyCollapsed() {
+    const isSearching = searchBox.value.trim() !== '';
+    document.querySelectorAll('[data-collapse]').forEach((btn) => {
+      const key = btn.dataset.collapse;
+      // While searching the home page, open every group so no match is hidden.
+      const shut = collapsed.has(key) && !(isSearching && key.startsWith('home:'));
+      const group = btn.closest('[data-collapsible]');
+      btn.setAttribute('aria-expanded', String(!shut));
+      group.classList.toggle('collapsed', shut);
+      group.querySelector('[data-collapse-body]').hidden = shut;
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-collapse]');
+    if (!btn) return;
+    const key = btn.dataset.collapse;
+    if (collapsed.has(key)) collapsed.delete(key); else collapsed.add(key);
+    try { localStorage.setItem(COLLAPSE_KEY, JSON.stringify([...collapsed])); } catch {}
+    applyCollapsed();
   });
 
   // ---------- Navigation (hash-based: #home, #md5, ...) ----------
@@ -207,6 +247,7 @@
     });
     empty.hidden = any;
     updateHomeSections();
+    applyCollapsed();
   });
   search.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter') return;
@@ -216,6 +257,7 @@
 
   showApp();
   renderStarred();
+  applyCollapsed();
 
   // ---------- Offline support ----------
   if ('serviceWorker' in navigator) {
