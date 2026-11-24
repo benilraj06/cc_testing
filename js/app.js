@@ -193,3 +193,58 @@ const formatBytes = (n) => n.toLocaleString() + (n === 1 ? ' byte' : ' bytes');
 
   updateMode();
 })();
+
+// --- Install popup (mobile only) ---
+(function () {
+  const sheet = document.getElementById('installSheet');
+  const actions = document.getElementById('installActions');
+  const steps = document.getElementById('installSteps');
+  const KEY = 'installDismissedAt';
+  const SNOOZE_DAYS = 14;
+
+  const isStandalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const ua = navigator.userAgent;
+  const isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  const isMobile = isIOS || /Android|Mobi/i.test(ua) || matchMedia('(pointer: coarse)').matches;
+  // Only Safari can add to the home screen on iOS; other iOS browsers (CriOS, FxiOS, ...) cannot always.
+  const isIOSSafari = isIOS && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+
+  function snoozed() {
+    try {
+      const t = Number(localStorage.getItem(KEY));
+      return t && Date.now() - t < SNOOZE_DAYS * 864e5;
+    } catch { return false; }
+  }
+  function dismiss() {
+    try { localStorage.setItem(KEY, String(Date.now())); } catch {}
+    hide();
+  }
+  function hide() { sheet.hidden = true; }
+  function show(mode) {
+    actions.hidden = mode !== 'prompt';
+    steps.hidden = mode !== 'ios';
+    sheet.hidden = false;
+  }
+
+  if (isStandalone || !isMobile || snoozed()) return;
+
+  let deferred = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferred = e;
+    setTimeout(() => show('prompt'), 1500);
+  });
+
+  document.getElementById('installBtn').addEventListener('click', async () => {
+    if (!deferred) return hide();
+    deferred.prompt();
+    const { outcome } = await deferred.userChoice;
+    deferred = null;
+    outcome === 'accepted' ? hide() : dismiss();
+  });
+  document.getElementById('installLater').addEventListener('click', dismiss);
+  document.getElementById('installClose').addEventListener('click', dismiss);
+  window.addEventListener('appinstalled', hide);
+
+  if (isIOSSafari) setTimeout(() => show('ios'), 1500);
+})();

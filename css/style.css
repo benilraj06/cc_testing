@@ -334,6 +334,47 @@ textarea:focus {
 .segmented input:checked + span { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
 .segmented input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 1px; }
 
+/* ---------- Install popup ---------- */
+.install-sheet {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04), 0 16px 48px rgba(17, 19, 31, 0.22);
+  z-index: 30;
+  animation: sheet-up 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes sheet-up { from { transform: translateY(calc(100% + 24px)); opacity: 0; } to { transform: none; opacity: 1; } }
+.install-close { position: absolute; top: 8px; right: 8px; width: 34px; height: 34px; color: var(--muted); }
+.install-close .ico { width: 18px; height: 18px; }
+.install-head { display: flex; align-items: center; gap: 14px; padding-right: 28px; }
+.install-icon { width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(91, 91, 240, 0.3); }
+.install-title { font-weight: 700; font-size: 1.02rem; }
+.install-text { font-size: 0.88rem; color: var(--muted); line-height: 1.4; }
+.install-actions { display: flex; gap: 10px; margin-top: 16px; }
+.install-actions .btn { flex: 1; }
+.btn {
+  font: inherit;
+  font-weight: 600;
+  padding: 11px 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; box-shadow: 0 4px 14px rgba(91, 91, 240, 0.35); }
+.btn-ghost { background: var(--surface-2); color: var(--text); }
+.install-steps { list-style: none; margin: 16px 0 0; padding: 14px; display: grid; gap: 10px; background: var(--surface-2); border-radius: 14px; font-size: 0.92rem; }
+.install-steps li { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.step-n { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 4px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 0.75rem; font-weight: 700; }
+.kbd { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); font-weight: 600; }
+.kbd .ico { width: 15px; height: 15px; color: var(--accent-text); }
+
 /* ---------- Mobile ---------- */
 .topbar, .backdrop { display: none; }
 .icon-btn {
