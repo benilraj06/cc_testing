@@ -79,7 +79,10 @@
       <header class="page-head">
         <div class="page-title-row">
           <h1>${escapeHTML(app.title)}</h1>
-          <button class="star-toggle" type="button" data-star="${app.id}" aria-pressed="false">${icon('i-star')}<span>Star</span></button>
+          <div class="head-actions">
+            <button class="head-btn star-toggle" type="button" data-star="${app.id}" aria-pressed="false">${icon('i-star')}<span>Star</span></button>
+            <button class="head-btn share-btn" type="button" data-share="${app.id}" aria-label="Share a link to ${escapeHTML(app.title)}">${icon('i-share')}<span>Share</span></button>
+          </div>
         </div>
         <p>${escapeHTML(app.desc)}</p>
       </header>
@@ -142,6 +145,38 @@
     if (!btn) return;
     e.preventDefault();
     toggleStar(btn.dataset.star);
+  });
+
+  // ---------- Share: system share sheet, or copy the link ----------
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-share]');
+    if (!btn) return;
+    const app = byId[btn.dataset.share];
+    const url = location.origin + location.pathname + '#' + app.id;
+    const label = btn.querySelector('span');
+    const use = btn.querySelector('use');
+    const flash = (text) => {
+      label.textContent = text;
+      use.setAttribute('href', '#i-check');
+      btn.classList.add('done');
+      setTimeout(() => {
+        label.textContent = 'Share';
+        use.setAttribute('href', '#i-share');
+        btn.classList.remove('done');
+      }, 1600);
+    };
+    const data = { title: `${app.title} · Pocketknife`, text: app.desc, url };
+    if (navigator.share && (!navigator.canShare || navigator.canShare(data))) {
+      try {
+        await navigator.share(data);
+        return;
+      } catch (err) {
+        if (err && err.name === 'AbortError') return; // user closed the share sheet
+      }
+    }
+    const ok = await PK.copyText(url);
+    if (ok) flash('Link copied');
+    else label.textContent = 'Couldn’t share';
   });
 
   document.getElementById('recentClear').addEventListener('click', () => {

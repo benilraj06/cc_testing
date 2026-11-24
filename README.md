@@ -19,6 +19,7 @@
 - **Private:** everything runs locally in the browser. There's no server and no tracking. GPS Location and Compass only ask for sensor access when you tap Start, and nothing leaves your device.
 - **Works offline:** a service worker saves the app after your first visit.
 - **Installable:** add it to your home screen or desktop as an app. Phones get an install prompt.
+- **Share:** every tool has a Share button that opens your phone's share sheet with a direct link to that tool, or copies the link on desktop.
 - **Starred and recent tools:** star tools to pin them to the top of the sidebar and home page. The home page also lists the tools you used most recently.
 - **Search and collapsible groups:** find a tool quickly or fold away the groups you don't use.
 - **Light, dark or system theme:** switch at the bottom of the sidebar.
@@ -87,7 +88,7 @@ GitHub Pages serves the `main` branch, so pushing to `main` deploys. On every re
 - every `?v=` in `index.html` (they must all match `VERSION`; the test checks this)
 
 ```bash
-sed -i 's/?v=15/?v=16/g' index.html && sed -i 's/const VERSION = 15;/const VERSION = 16;/' sw.js
+sed -i 's/?v=16/?v=17/g' index.html && sed -i 's/const VERSION = 16;/const VERSION = 17;/' sw.js
 ```
 
 ## Credits

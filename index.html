@@ -12,7 +12,7 @@
     // Apply a saved theme before first paint (no flash). No saved choice = follow the system.
     try { var t = localStorage.getItem('pk.theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
   </script>
-  <link rel="stylesheet" href="css/style.css?v=15">
+  <link rel="stylesheet" href="css/style.css?v=16">
 </head>
 <body>
   <!-- Reusable line icons -->
@@ -141,35 +141,35 @@
     Scripts. On each release bump every ?v= here and VERSION in sw.js.
     To add an app: create js/apps/<name>.js, add it below and to APP_FILES in sw.js.
   -->
-  <script src="js/md5.js?v=15"></script>
-  <script src="js/vendor/qrcode.js?v=15"></script>
-  <script src="js/core.js?v=15"></script>
+  <script src="js/md5.js?v=16"></script>
+  <script src="js/vendor/qrcode.js?v=16"></script>
+  <script src="js/core.js?v=16"></script>
   <!-- Hash & Encode -->
-  <script src="js/apps/md5.js?v=15"></script>
-  <script src="js/apps/sha.js?v=15"></script>
-  <script src="js/apps/base64.js?v=15"></script>
-  <script src="js/apps/url.js?v=15"></script>
-  <script src="js/apps/jwt.js?v=15"></script>
-  <script src="js/apps/hex.js?v=15"></script>
+  <script src="js/apps/md5.js?v=16"></script>
+  <script src="js/apps/sha.js?v=16"></script>
+  <script src="js/apps/base64.js?v=16"></script>
+  <script src="js/apps/url.js?v=16"></script>
+  <script src="js/apps/jwt.js?v=16"></script>
+  <script src="js/apps/hex.js?v=16"></script>
   <!-- Generate -->
-  <script src="js/apps/password.js?v=15"></script>
-  <script src="js/apps/uuid.js?v=15"></script>
-  <script src="js/apps/qr.js?v=15"></script>
-  <script src="js/apps/lorem.js?v=15"></script>
+  <script src="js/apps/password.js?v=16"></script>
+  <script src="js/apps/uuid.js?v=16"></script>
+  <script src="js/apps/qr.js?v=16"></script>
+  <script src="js/apps/lorem.js?v=16"></script>
   <!-- Convert & Format -->
-  <script src="js/apps/json.js?v=15"></script>
-  <script src="js/apps/timestamp.js?v=15"></script>
-  <script src="js/apps/numbase.js?v=15"></script>
-  <script src="js/apps/color.js?v=15"></script>
-  <script src="js/apps/case.js?v=15"></script>
+  <script src="js/apps/json.js?v=16"></script>
+  <script src="js/apps/timestamp.js?v=16"></script>
+  <script src="js/apps/numbase.js?v=16"></script>
+  <script src="js/apps/color.js?v=16"></script>
+  <script src="js/apps/case.js?v=16"></script>
   <!-- Text -->
-  <script src="js/apps/diff.js?v=15"></script>
-  <script src="js/apps/wordcount.js?v=15"></script>
-  <script src="js/apps/regex.js?v=15"></script>
+  <script src="js/apps/diff.js?v=16"></script>
+  <script src="js/apps/wordcount.js?v=16"></script>
+  <script src="js/apps/regex.js?v=16"></script>
   <!-- Device -->
-  <script src="js/apps/gps.js?v=15"></script>
-  <script src="js/apps/compass.js?v=15"></script>
+  <script src="js/apps/gps.js?v=16"></script>
+  <script src="js/apps/compass.js?v=16"></script>
   <!-- Must be last: builds navigation from the registered apps -->
-  <script src="js/main.js?v=15"></script>
+  <script src="js/main.js?v=16"></script>
 </body>
 </html>

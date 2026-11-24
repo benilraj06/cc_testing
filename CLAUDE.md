@@ -22,8 +22,9 @@ index.html   Shell only: SVG icon sprite (<symbol id="i-...">), top bar, sidebar
              A tiny inline <head> script applies the saved theme before paint.
 js/core.js   window.PK: the registry (PK.register, PK.apps, PK.CATEGORIES) and helpers.
 js/apps/*.js One file per tool; each calls PK.register({...}) at load time.
-js/main.js   MUST load last. Builds the sidebar, home tiles and tool <section>s from
-             PK.apps, calls each tool's init(), then runs hash routing, search, stars,
+js/main.js   MUST load last. Builds the sidebar, home tiles and tool <section>s (with
+             Star + Share header buttons) from PK.apps, calls each tool's init(), then
+             runs hash routing, search, stars, share,
              recent tools, collapsible groups, the theme switch, service worker
              registration and the install popup.
 css/style.css  All styles. Design tokens in :root; dark tokens under
@@ -105,9 +106,9 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 
 ## Release process
 
-1. Bump the version (replace 15/16 with the current/next numbers):
+1. Bump the version (replace 16/17 with the current/next numbers):
    ```bash
-   sed -i 's/?v=15/?v=16/g' index.html && sed -i 's/const VERSION = 15;/const VERSION = 16;/' sw.js
+   sed -i 's/?v=16/?v=17/g' index.html && sed -i 's/const VERSION = 16;/const VERSION = 17;/' sw.js
    ```
 2. `node tests/smoke.js`: all checks must pass.
 3. Commit, then push to the dev branch and to `main` (`git push origin HEAD:main`). Pages deploys in a minute or two.
@@ -137,6 +138,7 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 - **Test pitfalls:**
   - Playwright's `fill()` on `datetime-local` wants `YYYY-MM-DDTHH:mm`, without seconds.
   - Compass tests: dispatch fake sensor events (`new DeviceOrientationEvent('deviceorientationabsolute', { alpha, absolute: true })` for Android; a plain `Event('deviceorientation')` with `webkitCompassHeading` defined for iOS). Headless Chromium has `DeviceOrientationEvent.requestPermission` and answers "denied" unless the context grants `['accelerometer', 'gyroscope', 'magnetometer']`. To simulate iOS (no absolute event), `delete window.ondeviceorientationabsolute`: it's an own property of `window`, not of `Window.prototype`.
+  - Share tests: stub `navigator.share`/`canShare` in `addInitScript`, or delete them from `Navigator.prototype` to test the copy-link fallback. A rejected share with `AbortError` means the user cancelled, so nothing should be copied.
   - Playwright can emulate location (`geolocation` plus `permissions: ['geolocation']` on the context, and `context.setGeolocation()` to move) but not speed, heading or altitude. To test those, replace `navigator.geolocation` with a scripted fake in `addInitScript`.
   - `page.goto` reloads the page, so in-memory state is lost; click links to navigate within a session.
   - Screenshots taken mid-transition (0.15s) can show a stale toggle state; wait about 300ms.
@@ -158,5 +160,6 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 11. Added README, this file and `tests/smoke.js`.
 12. New **Device** category with the GPS Location tool.
 13. Compass tool (Device): iOS `webkitCompassHeading` or Android absolute orientation, smoothed needle that turns the short way past north.
+14. Share button beside Star on every tool page (Web Share API, falling back to copying the link).
 
-Current version: **15** (see `sw.js`).
+Current version: **16** (see `sw.js`).

@@ -452,12 +452,12 @@ textarea:focus {
 .tile-star:hover { background: var(--surface-2); color: var(--star); }
 .tile-star.on { opacity: 1; color: var(--star); }
 .tile-star.on .ico, .star-toggle.on .ico { fill: currentColor; }
-.tile-star:active, .star-toggle:active { transform: scale(0.9); }
+.tile-star:active, .head-btn:active { transform: scale(0.9); }
 @media (hover: none) { .tile-star { opacity: 0.8; } }
 
 .page-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 4px; }
 .page-title-row h1 { margin: 0; }
-.star-toggle {
+.head-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -472,7 +472,10 @@ textarea:focus {
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s, background 0.15s, transform 0.15s;
 }
-.star-toggle .ico { width: 15px; height: 15px; }
+.head-btn .ico { width: 15px; height: 15px; }
+.head-actions { display: inline-flex; gap: 8px; }
+.share-btn:hover { border-color: var(--accent); color: var(--accent-text); }
+.share-btn.done { border-color: var(--success); color: var(--success); }
 .star-toggle:hover { border-color: var(--star); color: var(--star); }
 .star-toggle.on { border-color: color-mix(in srgb, var(--star) 55%, var(--border)); background: color-mix(in srgb, var(--star) 12%, var(--surface)); color: var(--star-text); }
 
