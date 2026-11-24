@@ -155,10 +155,14 @@ h1 { letter-spacing: -0.02em; }
   font-size: clamp(2.2rem, 5vw, 3.2rem);
   font-weight: 800;
   letter-spacing: -0.035em;
-  background: linear-gradient(110deg, var(--text) 10%, var(--accent) 55%, var(--accent-2) 90%);
+}
+.hero-accent {
+  background: linear-gradient(110deg, var(--accent), var(--accent-2));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 .hero-sub { margin: 0; color: var(--muted); font-size: 1.05rem; }
 
