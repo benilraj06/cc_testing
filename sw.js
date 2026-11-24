@@ -1,8 +1,11 @@
-const CACHE = 'hello-world-v1';
+const CACHE = 'hello-world-v2';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
+  './css/style.css',
+  './js/app.js',
+  './js/md5.js',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];
