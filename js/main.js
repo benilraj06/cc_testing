@@ -259,6 +259,55 @@
   renderStarred();
   applyCollapsed();
 
+  // ---------- Theme: System (default) / Light / Dark ----------
+  const THEME_KEY = 'pk.theme';
+  const themeButtons = document.querySelectorAll('[data-theme-choice]');
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  const systemDark = matchMedia('(prefers-color-scheme: dark)');
+
+  function applyTheme(choice) {
+    const root = document.documentElement;
+    if (choice === 'light' || choice === 'dark') root.dataset.theme = choice;
+    else delete root.dataset.theme;
+    themeButtons.forEach((b) => {
+      const on = b.dataset.themeChoice === (choice || 'system');
+      b.setAttribute('aria-checked', String(on));
+      b.tabIndex = on ? 0 : -1;
+    });
+    // Match the browser/OS title bar to the page background.
+    const dark = choice === 'dark' || (choice !== 'light' && systemDark.matches);
+    themeMeta.setAttribute('content', dark ? '#13151d' : '#5b5bf0');
+  }
+
+  function savedTheme() {
+    try { return localStorage.getItem(THEME_KEY) || 'system'; } catch { return 'system'; }
+  }
+  let theme = savedTheme();
+
+  function setTheme(choice) {
+    theme = choice;
+    try {
+      if (choice === 'system') localStorage.removeItem(THEME_KEY);
+      else localStorage.setItem(THEME_KEY, choice);
+    } catch {}
+    applyTheme(choice);
+  }
+
+  themeButtons.forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.themeChoice)));
+  // Arrow keys move between the three options (radio group behaviour).
+  document.getElementById('themeSwitch').addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
+    e.preventDefault();
+    const list = [...themeButtons];
+    const i = list.findIndex((b) => b.getAttribute('aria-checked') === 'true');
+    const next = list[(i + (e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? list.length - 1 : 1)) % list.length];
+    setTheme(next.dataset.themeChoice);
+    next.focus();
+  });
+  // In System mode, follow the OS when it switches (e.g. at sunset).
+  systemDark.addEventListener('change', () => { if (theme === 'system') applyTheme('system'); });
+  applyTheme(theme);
+
   // ---------- Offline support ----------
   if ('serviceWorker' in navigator) {
     // If an older service worker was in control, reload once when the new one

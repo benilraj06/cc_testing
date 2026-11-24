@@ -17,10 +17,14 @@
   --sidebar-w: 248px;
   --font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --warn-text: #b45309;
+  --star-text: #b7791f;
   color-scheme: light;
 }
+/* Dark theme: follows the system unless the user picked one in the sidebar
+   (js/main.js sets data-theme="light" or "dark" on <html>). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #0b0c12;
     --surface: #13151d;
     --surface-2: #1a1d27;
@@ -35,8 +39,29 @@
     --danger: #fb7185;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.25);
     --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(124, 124, 255, 0.15);
+    --warn-text: #fbbf24;
+    --star-text: var(--star);
     color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  --bg: #0b0c12;
+  --surface: #13151d;
+  --surface-2: #1a1d27;
+  --text: #ecedf4;
+  --muted: #8b90a6;
+  --border: #242836;
+  --accent: #7c7cff;
+  --accent-2: #b48cff;
+  --accent-soft: #1f2040;
+  --accent-text: #a5a6ff;
+  --success: #4ade80;
+  --danger: #fb7185;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(124, 124, 255, 0.15);
+  --warn-text: #fbbf24;
+  --star-text: var(--star);
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -127,13 +152,46 @@ h1 { letter-spacing: -0.02em; }
 
 .sidebar-foot {
   margin-top: auto;
-  padding: 12px 10px 0;
+  padding: 16px 6px 0;
+  display: grid;
+  gap: 12px;
+}
+.foot-note {
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 0 4px;
   font-size: 0.78rem;
   color: var(--muted);
 }
+.theme-switch {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 3px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+}
+.theme-switch button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 6px 4px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+.theme-switch button .ico { width: 15px; height: 15px; }
+.theme-switch button:hover { color: var(--text); }
+.theme-switch button[aria-checked="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 20%, transparent); }
 
 /* ---------- Main ---------- */
@@ -416,8 +474,7 @@ textarea:focus {
 }
 .star-toggle .ico { width: 15px; height: 15px; }
 .star-toggle:hover { border-color: var(--star); color: var(--star); }
-.star-toggle.on { border-color: color-mix(in srgb, var(--star) 55%, var(--border)); background: color-mix(in srgb, var(--star) 12%, var(--surface)); color: #b7791f; }
-@media (prefers-color-scheme: dark) { .star-toggle.on { color: var(--star); } }
+.star-toggle.on { border-color: color-mix(in srgb, var(--star) 55%, var(--border)); background: color-mix(in srgb, var(--star) 12%, var(--surface)); color: var(--star-text); }
 
 /* Compact shortcut tiles on phones: two per row, icon + name only */
 @media (max-width: 800px) {
@@ -563,8 +620,7 @@ input[type="color"] { width: 48px; height: 42px; padding: 0; border: 1px solid v
 .badge { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; font-family: var(--font); vertical-align: middle; }
 .badge.ok { background: color-mix(in srgb, var(--success) 16%, transparent); color: var(--success); }
 .badge.bad { background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--danger); }
-.badge.warn { background: color-mix(in srgb, #f59e0b 18%, transparent); color: #b45309; }
-@media (prefers-color-scheme: dark) { .badge.warn { color: #fbbf24; } }
+.badge.warn { background: color-mix(in srgb, #f59e0b 18%, transparent); color: var(--warn-text); }
 .meter { height: 6px; border-radius: 999px; background: var(--surface-2); overflow: hidden; margin-top: 10px; }
 .meter > span { display: block; height: 100%; width: 0; border-radius: inherit; transition: width 0.25s, background 0.25s; }
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
