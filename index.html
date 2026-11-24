@@ -21,6 +21,7 @@
     <ul class="nav-list">
       <li><a href="#home" data-app="home"><span class="nav-icon">🏠</span>Home</a></li>
       <li><a href="#md5" data-app="md5" data-desc="Hash text or files with MD5."><span class="nav-icon">#️⃣</span>MD5 Hasher</a></li>
+      <li><a href="#base64" data-app="base64" data-desc="Encode or decode text and files as Base64."><span class="nav-icon">🔤</span>Base64 Encoder</a></li>
     </ul>
   </nav>
   <div class="backdrop" id="backdrop"></div>
@@ -51,6 +52,31 @@
         <button id="md5Copy" type="button">Copy</button>
       </div>
       <p class="muted small" id="md5Source">Hash of: empty text</p>
+    </section>
+
+    <section data-app="base64" data-title="Base64 Encoder" class="app" hidden>
+      <h1>Base64 Encoder</h1>
+
+      <div class="mode-toggle" role="radiogroup" aria-label="Mode">
+        <label><input type="radio" name="b64Mode" value="encode" checked> Encode</label>
+        <label><input type="radio" name="b64Mode" value="decode"> Decode</label>
+      </div>
+
+      <label for="b64Input" id="b64InputLabel">Text</label>
+      <textarea id="b64Input" rows="6" placeholder="Type or paste text…"></textarea>
+
+      <div id="b64FileGroup">
+        <div class="or">or</div>
+        <label for="b64File">File</label>
+        <input type="file" id="b64File">
+      </div>
+
+      <label for="b64Output" id="b64OutputLabel">Base64</label>
+      <div class="output-row">
+        <output id="b64Output" class="hash"></output>
+        <button id="b64Copy" type="button">Copy</button>
+      </div>
+      <p class="muted small" id="b64Status"></p>
     </section>
   </main>
 

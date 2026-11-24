@@ -74,3 +74,94 @@ showApp();
     setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1200);
   });
 })();
+
+// --- Base64 Encoder ---
+(function () {
+  const input = document.getElementById('b64Input');
+  const fileInput = document.getElementById('b64File');
+  const fileGroup = document.getElementById('b64FileGroup');
+  const output = document.getElementById('b64Output');
+  const status = document.getElementById('b64Status');
+  const copyBtn = document.getElementById('b64Copy');
+  const inputLabel = document.getElementById('b64InputLabel');
+  const outputLabel = document.getElementById('b64OutputLabel');
+  const modes = document.querySelectorAll('input[name="b64Mode"]');
+
+  const mode = () => document.querySelector('input[name="b64Mode"]:checked').value;
+
+  function bytesToBase64(bytes) {
+    let bin = '';
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    }
+    return btoa(bin);
+  }
+
+  function base64ToText(b64) {
+    // Accept URL-safe Base64 and missing padding too.
+    let clean = b64.replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+    while (clean.length % 4) clean += '=';
+    const bin = atob(clean);
+    const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
+    return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  }
+
+  function setStatus(text, isError) {
+    status.textContent = text;
+    status.classList.toggle('error', !!isError);
+    status.classList.toggle('muted', !isError);
+  }
+
+  function run() {
+    const text = input.value;
+    if (mode() === 'encode') {
+      output.textContent = bytesToBase64(new TextEncoder().encode(text));
+      setStatus(text ? `Encoded text (${text.length} characters)` : '');
+      return;
+    }
+    if (!text.trim()) { output.textContent = ''; setStatus(''); return; }
+    try {
+      output.textContent = base64ToText(text);
+      setStatus('Decoded Base64');
+    } catch (e) {
+      output.textContent = '';
+      setStatus(e instanceof TypeError
+        ? 'Decoded data is not valid UTF-8 text.'
+        : 'Not valid Base64.', true);
+    }
+  }
+
+  function updateMode() {
+    const enc = mode() === 'encode';
+    inputLabel.textContent = enc ? 'Text' : 'Base64';
+    outputLabel.textContent = enc ? 'Base64' : 'Text';
+    input.placeholder = enc ? 'Type or paste text…' : 'Paste Base64…';
+    fileGroup.hidden = !enc;
+    fileInput.value = '';
+    run();
+  }
+
+  input.addEventListener('input', () => { fileInput.value = ''; run(); });
+  modes.forEach((m) => m.addEventListener('change', updateMode));
+
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    input.value = '';
+    output.textContent = 'Encoding…';
+    output.textContent = bytesToBase64(new Uint8Array(await file.arrayBuffer()));
+    setStatus(`Encoded file "${file.name}" (${file.size.toLocaleString()} bytes)`);
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(output.textContent);
+      copyBtn.textContent = 'Copied!';
+    } catch {
+      copyBtn.textContent = 'Failed';
+    }
+    setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1200);
+  });
+
+  updateMode();
+})();
