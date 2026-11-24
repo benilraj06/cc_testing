@@ -1,6 +1,6 @@
 # Pocketknife
 
-**Small tools. Sharp results.** Pocketknife is a set of 19 handy developer, text and device tools that run entirely in your browser. Nothing you type or upload ever leaves your device, and once installed it works offline.
+**Small tools. Sharp results.** Pocketknife is a set of 20 handy developer, text and device tools that run entirely in your browser. Nothing you type or upload ever leaves your device, and once installed it works offline.
 
 **Live:** https://benilraj06.github.io/cc_testing/
 
@@ -12,11 +12,11 @@
 | **Generate** | Password Generator · UUID Generator (v4 / v7) · QR Code Maker · Lorem Ipsum |
 | **Convert & Format** | JSON Formatter · Timestamp Converter · Number Base Converter · Color Converter · Case Converter |
 | **Text** | Text Diff · Word Counter · Regex Tester |
-| **Device** | GPS Location (live coordinates, accuracy, altitude, speed, heading) |
+| **Device** | GPS Location (live coordinates, accuracy, altitude, speed, heading) · Compass |
 
 ## Features
 
-- **Private:** everything runs locally in the browser. There's no server and no tracking. GPS Location only asks for your position when you tap Start, and it never leaves your device.
+- **Private:** everything runs locally in the browser. There's no server and no tracking. GPS Location and Compass only ask for sensor access when you tap Start, and nothing leaves your device.
 - **Works offline:** a service worker saves the app after your first visit.
 - **Installable:** add it to your home screen or desktop as an app. Phones get an install prompt.
 - **Starred and recent tools:** star tools to pin them to the top of the sidebar and home page. The home page also lists the tools you used most recently.
@@ -87,7 +87,7 @@ GitHub Pages serves the `main` branch, so pushing to `main` deploys. On every re
 - every `?v=` in `index.html` (they must all match `VERSION`; the test checks this)
 
 ```bash
-sed -i 's/?v=14/?v=15/g' index.html && sed -i 's/const VERSION = 14;/const VERSION = 15;/' sw.js
+sed -i 's/?v=15/?v=16/g' index.html && sed -i 's/const VERSION = 15;/const VERSION = 16;/' sw.js
 ```
 
 ## Credits

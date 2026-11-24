@@ -703,6 +703,23 @@ a.btn-primary { color: #fff; }
 .gps-compass path { fill: var(--border); transform-origin: 24px 24px; transition: transform 0.4s ease; }
 .gps-compass.on path { fill: var(--accent); }
 .copy-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+/* Compass */
+.cmp-card { text-align: center; }
+.cmp-wrap { width: min(300px, 100%); margin: 0 auto; }
+.cmp-dial { display: block; width: 100%; height: auto; overflow: visible; }
+.cmp-rose { transform-origin: 100px 100px; }
+.cmp-ring { fill: var(--surface-2); stroke: var(--border); stroke-width: 2; }
+.cmp-tick { stroke: var(--muted); stroke-width: 1; opacity: 0.6; }
+.cmp-tick-l { stroke: var(--text); stroke-width: 2; }
+.cmp-n, .cmp-c { font: 700 16px var(--font); text-anchor: middle; dominant-baseline: middle; fill: var(--text); }
+.cmp-n { fill: var(--danger); font-size: 20px; }
+.cmp-north { fill: var(--danger); }
+.cmp-south { fill: var(--muted); opacity: 0.55; }
+.cmp-hub { fill: var(--surface); stroke: var(--text); stroke-width: 2; }
+.cmp-lubber { fill: var(--accent); }
+.cmp-readout { margin-top: 12px; }
+.cmp-deg { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.cmp-dir { color: var(--muted); font-weight: 600; }
 
 /* ---------- Install popup ---------- */
 .install-sheet {

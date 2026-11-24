@@ -1,6 +1,6 @@
 # CLAUDE.md: notes for working on Pocketknife
 
-Pocketknife is an installable, offline-first PWA: 19 small browser tools (hashing, encoding, generators, converters, text utilities, device sensors). Plain HTML/CSS/JS with **no build step, no framework and no npm dependencies at runtime**. It's hosted on GitHub Pages from `main`: https://benilraj06.github.io/cc_testing/
+Pocketknife is an installable, offline-first PWA: 20 small browser tools (hashing, encoding, generators, converters, text utilities, device sensors). Plain HTML/CSS/JS with **no build step, no framework and no npm dependencies at runtime**. It's hosted on GitHub Pages from `main`: https://benilraj06.github.io/cc_testing/
 
 Read this before changing anything. The "Lessons learned" section records real bugs from this project's history.
 
@@ -43,7 +43,7 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
    - options and a Generate button: `password.js`, `uuid.js`, `lorem.js`
    - two inputs side by side: `diff.js`, `regex.js` (use `wide: true`)
    - file input: `md5.js`, `hex.js`
-   - device API with a permission prompt and Start/Stop: `gps.js`
+   - device API with a permission prompt and Start/Stop: `gps.js`, `compass.js`
 3. **Register it**:
    ```js
    PK.register({
@@ -65,7 +65,7 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 6. **Add `'mytool'` to `APP_FILES`** in `sw.js`.
 7. **Bump the version** (Release process below).
 8. **Test**: `node tests/smoke.js`, then check its behaviour (compare outputs with a reference such as Node's `crypto`, `Buffer`, `URL`), then `--shots` and look at the phone (390px) and dark screenshots.
-9. **Update `README.md`**: the tool table and the tool count ("19 tools") in its first line.
+9. **Update `README.md`**: the tool table and the tool count ("20 tools") in its first line.
 
 ### Conventions inside a tool
 
@@ -105,9 +105,9 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 
 ## Release process
 
-1. Bump the version (replace 14/15 with the current/next numbers):
+1. Bump the version (replace 15/16 with the current/next numbers):
    ```bash
-   sed -i 's/?v=14/?v=15/g' index.html && sed -i 's/const VERSION = 14;/const VERSION = 15;/' sw.js
+   sed -i 's/?v=15/?v=16/g' index.html && sed -i 's/const VERSION = 15;/const VERSION = 16;/' sw.js
    ```
 2. `node tests/smoke.js`: all checks must pass.
 3. Commit, then push to the dev branch and to `main` (`git push origin HEAD:main`). Pages deploys in a minute or two.
@@ -136,6 +136,7 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 - **Phone layouts:** result headers with a label plus buttons need `flex-wrap`. Starred and recent tiles use a compact two-column layout under 800px.
 - **Test pitfalls:**
   - Playwright's `fill()` on `datetime-local` wants `YYYY-MM-DDTHH:mm`, without seconds.
+  - Compass tests: dispatch fake sensor events (`new DeviceOrientationEvent('deviceorientationabsolute', { alpha, absolute: true })` for Android; a plain `Event('deviceorientation')` with `webkitCompassHeading` defined for iOS). Headless Chromium has `DeviceOrientationEvent.requestPermission` and answers "denied" unless the context grants `['accelerometer', 'gyroscope', 'magnetometer']`. To simulate iOS (no absolute event), `delete window.ondeviceorientationabsolute`: it's an own property of `window`, not of `Window.prototype`.
   - Playwright can emulate location (`geolocation` plus `permissions: ['geolocation']` on the context, and `context.setGeolocation()` to move) but not speed, heading or altitude. To test those, replace `navigator.geolocation` with a scripted fake in `addInitScript`.
   - `page.goto` reloads the page, so in-memory state is lost; click links to navigate within a session.
   - Screenshots taken mid-transition (0.15s) can show a stale toggle state; wait about 300ms.
@@ -156,5 +157,6 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 10. System / Light / Dark theme switch (default System, no flash on load).
 11. Added README, this file and `tests/smoke.js`.
 12. New **Device** category with the GPS Location tool.
+13. Compass tool (Device): iOS `webkitCompassHeading` or Android absolute orientation, smoothed needle that turns the short way past north.
 
-Current version: **14** (see `sw.js`).
+Current version: **15** (see `sw.js`).
