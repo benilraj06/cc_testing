@@ -1,12 +1,12 @@
 {
-  "name": "Hello World",
-  "short_name": "Hello",
-  "description": "A simple Hello World progressive web app.",
+  "name": "Toolbox",
+  "short_name": "Toolbox",
+  "description": "Handy tools that run entirely in your browser.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f5f5f5",
-  "theme_color": "#3b5bdb",
+  "background_color": "#f6f7fb",
+  "theme_color": "#5b5bf0",
   "icons": [
     {
       "src": "icons/icon-192.png",

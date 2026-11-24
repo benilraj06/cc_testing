@@ -1,4 +1,4 @@
-const CACHE = 'hello-world-v4';
+const CACHE = 'hello-world-v5';
 const ASSETS = [
   './',
   './index.html',
