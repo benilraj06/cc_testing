@@ -1,3 +1,15 @@
+// --- Offline support ---
+if ('serviceWorker' in navigator) {
+  // If an older service worker was in control, reload once when the new one
+  // takes over so the page isn't left running a mix of old and new files.
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (hadController && !reloaded) { reloaded = true; location.reload(); }
+  });
+  navigator.serviceWorker.register('sw.js');
+}
+
 // --- Home tiles: one per app link in the sidebar ---
 const tiles = document.getElementById('tiles');
 document.querySelectorAll('#appLinks a[data-app]').forEach((link) => {
@@ -219,11 +231,15 @@ const formatBytes = (n) => n.toLocaleString() + (n === 1 ? ' byte' : ' bytes');
     try { localStorage.setItem(KEY, String(Date.now())); } catch {}
     hide();
   }
-  function hide() { sheet.hidden = true; }
+  function hide() {
+    sheet.hidden = true;
+    document.body.style.paddingBottom = '';
+  }
   function show(mode) {
     actions.hidden = mode !== 'prompt';
     steps.hidden = mode !== 'ios';
     sheet.hidden = false;
+    document.body.style.paddingBottom = sheet.offsetHeight + 24 + 'px';
   }
 
   if (isStandalone || !isMobile || snoozed()) return;

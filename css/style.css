@@ -374,6 +374,20 @@ textarea:focus {
 .step-n { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 4px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 0.75rem; font-weight: 700; }
 .kbd { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); font-weight: 600; }
 .kbd .ico { width: 15px; height: 15px; color: var(--accent-text); }
+.kbd { white-space: nowrap; }
+
+/* Keep the popup compact on small or short screens */
+@media (max-width: 380px), (max-height: 560px) {
+  .install-sheet { padding: 14px; border-radius: 16px; }
+  .install-icon { width: 40px; height: 40px; border-radius: 11px; }
+  .install-text { display: none; }
+  .install-actions { margin-top: 12px; }
+  .install-actions .btn { padding: 9px 12px; }
+  .install-steps { margin-top: 12px; padding: 10px 12px; gap: 8px; font-size: 0.86rem; }
+}
+@media (max-height: 560px) {
+  .install-steps { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+}
 
 /* ---------- Mobile ---------- */
 .topbar, .backdrop { display: none; }
