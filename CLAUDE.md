@@ -1,12 +1,12 @@
 # CLAUDE.md: notes for working on Pocketknife
 
-Pocketknife is an installable, offline-first PWA: 21 small browser tools (hashing, encoding, generators, converters, text utilities, device sensors). Plain HTML/CSS/JS with **no build step, no framework and no npm dependencies at runtime**. It's hosted on GitHub Pages from `main`: https://benilraj06.github.io/cc_testing/
+Pocketknife is an installable, offline-first PWA: 25 small browser tools (hashing, encoding, generators, converters, text utilities, device sensors). Plain HTML/CSS/JS with **no build step, no framework and no npm dependencies at runtime**. It's hosted on GitHub Pages from `main`: https://benilraj06.github.io/cc_testing/
 
 Read this before changing anything. The "Lessons learned" section records real bugs from this project's history.
 
 ## Golden rules
 
-1. **Everything must work offline and locally.** No CDN scripts, web fonts, analytics or network APIs. If a tool needs a library, vendor it into `js/vendor/` (check the licence; keep its header) and add it to `sw.js`.
+1. **Everything must work offline and locally.** No CDN scripts, web fonts, analytics or network APIs. If a tool needs a library, vendor it into `js/vendor/` (check the licence; keep its header) and add it to `sw.js`. Large ones can be lazy-loaded (see how `qrscan.js` loads `jsqr.js` only when there's no `BarcodeDetector`).
 2. **Every release bumps the version** in two places that must match: `VERSION` in `sw.js` and every `?v=N` in `index.html`. Use the `sed` one-liner under Release process.
 3. **A new tool touches exactly three places:** a new `js/apps/<id>.js`, a `<script>` tag in `index.html`, and `APP_FILES` in `sw.js`. The test fails if they disagree.
 4. **Run `node tests/smoke.js` before every commit.** It must pass 100%.
@@ -44,7 +44,7 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
    - options and a Generate button: `password.js`, `uuid.js`, `lorem.js`
    - two inputs side by side: `diff.js`, `regex.js` (use `wide: true`)
    - file input: `md5.js`, `hex.js`
-   - device API with a permission prompt and Start/Stop: `gps.js`, `compass.js`
+   - device API with a permission prompt and Start/Stop: `gps.js`, `compass.js`, `level.js`, `sound.js`, `qrscan.js`, `nfc.js`
 3. **Register it**:
    ```js
    PK.register({
@@ -143,6 +143,11 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
   - `page.goto` reloads the page, so in-memory state is lost; click links to navigate within a session.
   - Screenshots taken mid-transition (0.15s) can show a stale toggle state; wait about 300ms.
   - Always pass an absolute output path to screenshot scripts. A missing env var once created an `undefined/` folder of screenshots that got committed. `tests/output/` is git-ignored.
+- **SVG elements have no `.hidden` property:** setting `svg.hidden = true` does nothing (it's HTMLElement-only). Use `el.toggleAttribute('hidden', bool)`; the global `[hidden]` rule then applies.
+- **More test pitfalls (device tools):**
+  - Camera and microphone: launch Chromium with `--use-fake-ui-for-media-stream --use-fake-device-for-media-stream`; add `--use-file-for-fake-video-capture=<file>.y4m` to feed a picture (e.g. a QR code). `getUserMedia` needs a secure origin, so not `about:blank`.
+  - Headless Chromium on Linux has no `BarcodeDetector`, so tests exercise the jsQR path.
+  - Web NFC: stub `window.NDEFReader` in `addInitScript` and call the instance's `onreading` with a fake `{ serialNumber, message: { records } }`.
 - **Regex Tester limit:** catastrophic-backtracking patterns such as `(a+)+$` can freeze the tab. That's a limit of the JS regex engine, and it's accepted.
 
 ## History (most recent last)
@@ -162,5 +167,6 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 13. Compass tool (Device): iOS `webkitCompassHeading` or Android absolute orientation, smoothed needle that turns the short way past north.
 14. Share button beside Star on every tool page (Web Share API, falling back to copying the link).
 15. Screen Flashlight tool (Device): full-screen light with steady, SOS (Morse timing) and strobe modes, colours, brightness, fullscreen and screen wake lock.
+16. Bubble Level, Sound Meter, QR Scanner (BarcodeDetector, falling back to vendored jsQR, Apache-2.0) and NFC Reader (Web NFC, Chrome on Android) tools (Device).
 
-Current version: **17** (see `sw.js`).
+Current version: **18** (see `sw.js`).

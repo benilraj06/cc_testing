@@ -1,6 +1,6 @@
 # Pocketknife
 
-**Small tools. Sharp results.** Pocketknife is a set of 21 handy developer, text and device tools that run entirely in your browser. Nothing you type or upload ever leaves your device, and once installed it works offline.
+**Small tools. Sharp results.** Pocketknife is a set of 25 handy developer, text and device tools that run entirely in your browser. Nothing you type or upload ever leaves your device, and once installed it works offline.
 
 **Live:** https://benilraj06.github.io/cc_testing/
 
@@ -12,11 +12,11 @@
 | **Generate** | Password Generator · UUID Generator (v4 / v7) · QR Code Maker · Lorem Ipsum |
 | **Convert & Format** | JSON Formatter · Timestamp Converter · Number Base Converter · Color Converter · Case Converter |
 | **Text** | Text Diff · Word Counter · Regex Tester |
-| **Device** | GPS Location (live coordinates, accuracy, altitude, speed, heading) · Compass · Screen Flashlight (steady, SOS, strobe) |
+| **Device** | GPS Location (live coordinates, accuracy, altitude, speed, heading) · Compass · Screen Flashlight (steady, SOS, strobe) · Bubble Level · Sound Meter · QR Scanner (camera or image) · NFC Reader (Chrome on Android) |
 
 ## Features
 
-- **Private:** everything runs locally in the browser. There's no server and no tracking. GPS Location and Compass only ask for sensor access when you tap Start, and nothing leaves your device.
+- **Private:** everything runs locally in the browser. There's no server and no tracking. Device tools (GPS, Compass, Bubble Level, Sound Meter, QR Scanner, NFC Reader) only ask for sensor, microphone or camera access when you tap Start, and nothing is recorded or leaves your device.
 - **Works offline:** a service worker saves the app after your first visit.
 - **Installable:** add it to your home screen or desktop as an app. Phones get an install prompt.
 - **Share:** every tool has a Share button that opens your phone's share sheet with a direct link to that tool, or copies the link on desktop.

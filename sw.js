@@ -3,14 +3,14 @@
 // fall back to the saved copy when offline.
 // On each release, bump VERSION here and the matching ?v= in index.html, so
 // browsers never pair a new page with old cached CSS or JS.
-const VERSION = 17;
+const VERSION = 18;
 const CACHE = 'pocketknife-v' + VERSION;
 const APP_FILES = [
   'md5', 'sha', 'base64', 'url', 'jwt', 'hex',
   'password', 'uuid', 'qr', 'lorem',
   'json', 'timestamp', 'numbase', 'color', 'case',
   'diff', 'wordcount', 'regex',
-  'gps', 'compass', 'flashlight',
+  'gps', 'compass', 'flashlight', 'level', 'sound', 'qrscan', 'nfc',
 ];
 const ASSETS = [
   './',
@@ -18,7 +18,7 @@ const ASSETS = [
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  ...['css/style.css', 'js/md5.js', 'js/vendor/qrcode.js', 'js/core.js', 'js/main.js',
+  ...['css/style.css', 'js/md5.js', 'js/vendor/qrcode.js', 'js/vendor/jsqr.js', 'js/core.js', 'js/main.js',
     ...APP_FILES.map((f) => `js/apps/${f}.js`)].map((f) => `./${f}?v=${VERSION}`),
 ];
 

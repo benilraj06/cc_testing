@@ -12,7 +12,7 @@
     // Apply a saved theme before first paint (no flash). No saved choice = follow the system.
     try { var t = localStorage.getItem('pk.theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
   </script>
-  <link rel="stylesheet" href="css/style.css?v=17">
+  <link rel="stylesheet" href="css/style.css?v=18">
 </head>
 <body>
   <!-- Reusable line icons -->
@@ -56,6 +56,10 @@
     <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h6M9 9h1"/></symbol>
     <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12Z"/><circle cx="12" cy="9" r="2.5"/></symbol>
     <symbol id="i-flashlight" viewBox="0 0 24 24"><path d="M8 3h8v4l-2 3v10a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V10L8 7Z"/><path d="M8 7h8"/><path d="M12 13v2"/></symbol>
+    <symbol id="i-level" viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="8" rx="4"/><circle cx="12" cy="12" r="2"/><path d="M8 8v8M16 8v8"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></symbol>
+    <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><rect x="8" y="8" width="3" height="3"/><rect x="13" y="13" width="3" height="3"/><path d="M13 8h3v3M8 13v3h3"/></symbol>
+    <symbol id="i-nfc" viewBox="0 0 24 24"><path d="M6 9.5a3.5 3.5 0 0 1 0 5M9.5 7a7 7 0 0 1 0 10M13 4.5a10.5 10.5 0 0 1 0 15M16.5 2a14 14 0 0 1 0 20"/></symbol>
     <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5Z"/></symbol>
     <symbol id="i-regex" viewBox="0 0 24 24"><path d="M17 3v10M12.7 5.5l8.6 5M21.3 5.5l-8.6 5"/><rect x="3" y="15" width="6" height="6" rx="1"/></symbol>
   </svg>
@@ -142,36 +146,40 @@
     Scripts. On each release bump every ?v= here and VERSION in sw.js.
     To add an app: create js/apps/<name>.js, add it below and to APP_FILES in sw.js.
   -->
-  <script src="js/md5.js?v=17"></script>
-  <script src="js/vendor/qrcode.js?v=17"></script>
-  <script src="js/core.js?v=17"></script>
+  <script src="js/md5.js?v=18"></script>
+  <script src="js/vendor/qrcode.js?v=18"></script>
+  <script src="js/core.js?v=18"></script>
   <!-- Hash & Encode -->
-  <script src="js/apps/md5.js?v=17"></script>
-  <script src="js/apps/sha.js?v=17"></script>
-  <script src="js/apps/base64.js?v=17"></script>
-  <script src="js/apps/url.js?v=17"></script>
-  <script src="js/apps/jwt.js?v=17"></script>
-  <script src="js/apps/hex.js?v=17"></script>
+  <script src="js/apps/md5.js?v=18"></script>
+  <script src="js/apps/sha.js?v=18"></script>
+  <script src="js/apps/base64.js?v=18"></script>
+  <script src="js/apps/url.js?v=18"></script>
+  <script src="js/apps/jwt.js?v=18"></script>
+  <script src="js/apps/hex.js?v=18"></script>
   <!-- Generate -->
-  <script src="js/apps/password.js?v=17"></script>
-  <script src="js/apps/uuid.js?v=17"></script>
-  <script src="js/apps/qr.js?v=17"></script>
-  <script src="js/apps/lorem.js?v=17"></script>
+  <script src="js/apps/password.js?v=18"></script>
+  <script src="js/apps/uuid.js?v=18"></script>
+  <script src="js/apps/qr.js?v=18"></script>
+  <script src="js/apps/lorem.js?v=18"></script>
   <!-- Convert & Format -->
-  <script src="js/apps/json.js?v=17"></script>
-  <script src="js/apps/timestamp.js?v=17"></script>
-  <script src="js/apps/numbase.js?v=17"></script>
-  <script src="js/apps/color.js?v=17"></script>
-  <script src="js/apps/case.js?v=17"></script>
+  <script src="js/apps/json.js?v=18"></script>
+  <script src="js/apps/timestamp.js?v=18"></script>
+  <script src="js/apps/numbase.js?v=18"></script>
+  <script src="js/apps/color.js?v=18"></script>
+  <script src="js/apps/case.js?v=18"></script>
   <!-- Text -->
-  <script src="js/apps/diff.js?v=17"></script>
-  <script src="js/apps/wordcount.js?v=17"></script>
-  <script src="js/apps/regex.js?v=17"></script>
+  <script src="js/apps/diff.js?v=18"></script>
+  <script src="js/apps/wordcount.js?v=18"></script>
+  <script src="js/apps/regex.js?v=18"></script>
   <!-- Device -->
-  <script src="js/apps/gps.js?v=17"></script>
-  <script src="js/apps/compass.js?v=17"></script>
-  <script src="js/apps/flashlight.js?v=17"></script>
+  <script src="js/apps/gps.js?v=18"></script>
+  <script src="js/apps/compass.js?v=18"></script>
+  <script src="js/apps/flashlight.js?v=18"></script>
+  <script src="js/apps/level.js?v=18"></script>
+  <script src="js/apps/sound.js?v=18"></script>
+  <script src="js/apps/qrscan.js?v=18"></script>
+  <script src="js/apps/nfc.js?v=18"></script>
   <!-- Must be last: builds navigation from the registered apps -->
-  <script src="js/main.js?v=17"></script>
+  <script src="js/main.js?v=18"></script>
 </body>
 </html>

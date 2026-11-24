@@ -873,7 +873,7 @@ a.btn-primary { color: #fff; }
 .fl-color input:checked ~ em { color: var(--text); font-weight: 600; }
 .fl-color input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 4px; }
 .fl-warn { color: var(--warn-text); margin-bottom: 0; }
-.fl-tips { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 0.92rem; }
+.tip-list { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 0.92rem; }
 /* The light itself: real colours on purpose, not theme tokens. */
 .fl-overlay { position: fixed; inset: 0; z-index: 1000; background: #000; cursor: pointer; outline: none; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
 .fl-light { position: absolute; inset: 0; opacity: 0; }
@@ -893,3 +893,55 @@ a.btn-primary { color: #fff; }
 .fl-caption span.on { opacity: 0.9; }
 @keyframes fl-fade { 0%, 60% { opacity: 0.55; } 100% { opacity: 0.18; } }
 html.fl-active, html.fl-active body { overflow: hidden; }
+/* Bubble Level */
+.lv-card { text-align: center; }
+.lv-mode { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+.lv-dial { display: block; width: min(280px, 100%); height: auto; margin: 0 auto; }
+.lv-tube { display: block; width: min(420px, 100%); height: auto; margin: 24px auto; }
+.lv-ring { fill: var(--surface-2); stroke: var(--border); stroke-width: 2; }
+.lv-guide { fill: none; stroke: var(--border); stroke-width: 1.5; }
+.lv-cross { stroke: var(--border); stroke-width: 1.5; }
+.lv-target { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.lv-bubble { fill: color-mix(in srgb, var(--accent) 70%, transparent); stroke: var(--accent); stroke-width: 2; transition: fill 0.2s, stroke 0.2s; }
+.lv-card.is-level .lv-bubble { fill: color-mix(in srgb, var(--success) 70%, transparent); stroke: var(--success); }
+.lv-readout { margin-top: 12px; }
+.lv-deg { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.lv-card.is-level .lv-deg, .lv-card.is-level .lv-sub { color: var(--success); }
+.lv-sub { color: var(--muted); font-weight: 600; }
+.lv-actions { justify-content: center; }
+/* Sound Meter */
+.snd-card { text-align: center; }
+.snd-now { font-size: 4rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.snd-now small { font-size: 1.2rem; font-weight: 700; color: var(--muted); margin-left: 6px; letter-spacing: 0; }
+.snd-level { margin-top: 6px; font-weight: 600; color: var(--muted); }
+.snd-level.ok { color: var(--success); }
+.snd-level.warn { color: var(--warn-text); }
+.snd-level.bad { color: var(--danger); }
+.snd-bar { position: relative; height: 12px; margin-top: 18px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.snd-bar span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--success); }
+.snd-bar span[data-level="warn"] { background: #f59e0b; }
+.snd-bar span[data-level="bad"] { background: var(--danger); }
+.snd-bar i { position: absolute; top: 0; bottom: 0; width: 2px; left: 0; background: var(--text); opacity: 0.6; }
+.snd-scale { display: flex; justify-content: space-between; margin-top: 4px; font-size: 0.72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.snd-graph { display: block; width: 100%; height: 140px; margin-top: 16px; border-radius: 12px; background: var(--surface-2); }
+.snd-ref { margin-top: 12px; }
+.snd-ref td { font-family: var(--font); }
+/* QR Scanner */
+.qs-view { position: relative; overflow: hidden; border-radius: 12px; background: #000; aspect-ratio: 4 / 3; max-height: 60vh; }
+.qs-view video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.qs-frame { position: absolute; left: 50%; top: 50%; width: min(62%, 62vh); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 18px; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.35); outline: 3px solid rgba(255, 255, 255, 0.9); outline-offset: -3px; }
+.qs-cam-actions { justify-content: center; }
+.qs-cam-actions:not(:has(> :not([hidden]))) { display: none; }
+.qs-result { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow-y: auto; }
+.qs-wifi { margin-top: 12px; }
+/* NFC Reader */
+.nfc-unsupported p { margin: 0; }
+.nfc-wait { text-align: center; }
+.nfc-wait p { margin: 10px 0 0; }
+.nfc-pulse { display: inline-grid; place-items: center; width: 72px; height: 72px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-text); animation: gps-pulse 1.6s ease-in-out infinite; }
+.nfc-pulse svg { width: 34px; height: 34px; }
+.nfc-reads { display: grid; gap: 12px; }
+.nfc-read { padding: 12px; border-radius: 12px; background: var(--surface-2); }
+.nfc-read-head { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 0.9rem; }
+.nfc-read .out-row { border-color: var(--border); }
+.nfc-val { white-space: pre-wrap; }

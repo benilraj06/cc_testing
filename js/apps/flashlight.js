@@ -51,7 +51,7 @@ PK.register({
 
     <div class="card">
       <div class="card-title">Tips</div>
-      <ul class="fl-tips muted">
+      <ul class="tip-list muted">
         <li>Turn your phone’s screen brightness all the way up. Web pages can’t change it for you.</li>
         <li>Red light keeps your night vision. Warm light is easier on the eyes for reading.</li>
         <li>SOS repeats three short, three long, three short flashes (··· — — — ···), the international distress signal.</li>
