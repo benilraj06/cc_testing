@@ -1,3 +1,18 @@
+// --- Home tiles: one per sidebar app (except Home) ---
+const tiles = document.getElementById('tiles');
+document.querySelectorAll('.nav-list a[data-app]').forEach((link) => {
+  if (link.dataset.app === 'home') return;
+  const tile = document.createElement('a');
+  tile.className = 'tile';
+  tile.href = link.getAttribute('href');
+  const icon = link.querySelector('.nav-icon');
+  tile.innerHTML = '<span class="tile-icon"></span><span class="tile-title"></span><span class="tile-desc"></span>';
+  tile.querySelector('.tile-icon').textContent = icon ? icon.textContent : '';
+  tile.querySelector('.tile-title').textContent = link.textContent.replace(icon ? icon.textContent : '', '').trim();
+  tile.querySelector('.tile-desc').textContent = link.dataset.desc || '';
+  tiles.appendChild(tile);
+});
+
 // --- Sidebar navigation (hash-based: #home, #md5, ...) ---
 const apps = document.querySelectorAll('section[data-app]');
 const links = document.querySelectorAll('.nav-list a[data-app]');

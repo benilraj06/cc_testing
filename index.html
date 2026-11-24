@@ -19,8 +19,8 @@
   <nav class="sidebar" id="sidebar" aria-label="Applications">
     <div class="sidebar-brand">Toolbox</div>
     <ul class="nav-list">
-      <li><a href="#home" data-app="home">🏠 Home</a></li>
-      <li><a href="#md5" data-app="md5">#️⃣ MD5 Hasher</a></li>
+      <li><a href="#home" data-app="home"><span class="nav-icon">🏠</span>Home</a></li>
+      <li><a href="#md5" data-app="md5" data-desc="Hash text or files with MD5."><span class="nav-icon">#️⃣</span>MD5 Hasher</a></li>
     </ul>
   </nav>
   <div class="backdrop" id="backdrop"></div>
@@ -29,7 +29,9 @@
     <!-- Each app is a <section data-app="id" data-title="..."> plus a nav link above. -->
     <section data-app="home" data-title="Hello World" class="app app-home">
       <h1>Hello, World!</h1>
-      <p class="muted">Pick an app from the sidebar.</p>
+      <p class="muted">Pick an app to get started.</p>
+      <!-- Filled from the sidebar links by js/app.js -->
+      <div class="tiles" id="tiles"></div>
     </section>
 
     <section data-app="md5" data-title="MD5 Hasher" class="app" hidden>
