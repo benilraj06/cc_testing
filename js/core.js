@@ -14,7 +14,7 @@
 
 window.PK = (function () {
   const apps = [];
-  const CATEGORIES = ['Hash & Encode', 'Generate', 'Convert & Format', 'Text'];
+  const CATEGORIES = ['Hash & Encode', 'Generate', 'Convert & Format', 'Text', 'Device'];
 
   function register(app) {
     if (!CATEGORIES.includes(app.category)) throw new Error(`Unknown category for ${app.id}`);

@@ -1,6 +1,6 @@
 # CLAUDE.md: notes for working on Pocketknife
 
-Pocketknife is an installable, offline-first PWA: 18 small browser tools (hashing, encoding, generators, converters, text utilities). Plain HTML/CSS/JS with **no build step, no framework and no npm dependencies at runtime**. It's hosted on GitHub Pages from `main`: https://benilraj06.github.io/cc_testing/
+Pocketknife is an installable, offline-first PWA: 19 small browser tools (hashing, encoding, generators, converters, text utilities, device sensors). Plain HTML/CSS/JS with **no build step, no framework and no npm dependencies at runtime**. It's hosted on GitHub Pages from `main`: https://benilraj06.github.io/cc_testing/
 
 Read this before changing anything. The "Lessons learned" section records real bugs from this project's history.
 
@@ -43,6 +43,7 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
    - options and a Generate button: `password.js`, `uuid.js`, `lorem.js`
    - two inputs side by side: `diff.js`, `regex.js` (use `wide: true`)
    - file input: `md5.js`, `hex.js`
+   - device API with a permission prompt and Start/Stop: `gps.js`
 3. **Register it**:
    ```js
    PK.register({
@@ -58,13 +59,13 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
      onShow() { ... },                    // optional: runs each time the tool is opened
    });
    ```
-   `PK.CATEGORIES` = `'Hash & Encode'`, `'Generate'`, `'Convert & Format'`, `'Text'`. To add a category, edit the array in `js/core.js`. Order there sets sidebar and home order; within a category, tools appear in `<script>` order.
+   `PK.CATEGORIES` = `'Hash & Encode'`, `'Generate'`, `'Convert & Format'`, `'Text'`, `'Device'`. To add a category, edit the array in `js/core.js`. Order there sets sidebar and home order; within a category, tools appear in `<script>` order.
 4. **Add an icon**: a `<symbol id="i-mytool" viewBox="0 0 24 24">` in the sprite in `index.html`. It's a stroke-only line icon on a 24×24 grid (CSS applies `stroke: currentColor; fill: none; stroke-width: 1.8`). Reuse an existing icon if it fits.
 5. **Add `<script src="js/apps/mytool.js?v=N"></script>`** to `index.html` in its category block, before `js/main.js`.
 6. **Add `'mytool'` to `APP_FILES`** in `sw.js`.
 7. **Bump the version** (Release process below).
 8. **Test**: `node tests/smoke.js`, then check its behaviour (compare outputs with a reference such as Node's `crypto`, `Buffer`, `URL`), then `--shots` and look at the phone (390px) and dark screenshots.
-9. **Update `README.md`**: the tool table and the tool count ("18 tools") in its first line.
+9. **Update `README.md`**: the tool table and the tool count ("19 tools") in its first line.
 
 ### Conventions inside a tool
 
@@ -75,6 +76,8 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 - **Never inject user text as HTML.** Use `textContent`, or `PK.escapeHTML()` when building markup.
 - **Large inputs**: cap work so the page stays responsive (see `MAX_CELLS` in `diff.js`, `LIMIT` in `hex.js`, `MAX_MATCHES` in `regex.js`).
 - **Timers** (like `timestamp.js`'s clock) should skip work while `root.hidden` is true.
+- **Device APIs** (location, camera, sensors): only ask for permission when the user taps a button, never on load. Handle denied, unavailable and unsupported states with a clear message. Stop watchers when the user leaves the tool (`gps.js` listens for `hashchange` and checks `root.hidden`). They need a secure context (https or localhost).
+- **What browsers can't do:** web pages can't scan the local network (no ARP, ping or raw sockets; local IPs are hidden; Chrome blocks public sites from reaching private addresses). A Wi-Fi device scanner was requested and declined for this reason. Don't build tools that pretend to do it.
 
 ### Helpers in `PK` (js/core.js)
 
@@ -102,9 +105,9 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 
 ## Release process
 
-1. Bump the version (replace 13/14 with the current/next numbers):
+1. Bump the version (replace 14/15 with the current/next numbers):
    ```bash
-   sed -i 's/?v=13/?v=14/g' index.html && sed -i 's/const VERSION = 13;/const VERSION = 14;/' sw.js
+   sed -i 's/?v=14/?v=15/g' index.html && sed -i 's/const VERSION = 14;/const VERSION = 15;/' sw.js
    ```
 2. `node tests/smoke.js`: all checks must pass.
 3. Commit, then push to the dev branch and to `main` (`git push origin HEAD:main`). Pages deploys in a minute or two.
@@ -133,6 +136,7 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 - **Phone layouts:** result headers with a label plus buttons need `flex-wrap`. Starred and recent tiles use a compact two-column layout under 800px.
 - **Test pitfalls:**
   - Playwright's `fill()` on `datetime-local` wants `YYYY-MM-DDTHH:mm`, without seconds.
+  - Playwright can emulate location (`geolocation` plus `permissions: ['geolocation']` on the context, and `context.setGeolocation()` to move) but not speed, heading or altitude. To test those, replace `navigator.geolocation` with a scripted fake in `addInitScript`.
   - `page.goto` reloads the page, so in-memory state is lost; click links to navigate within a session.
   - Screenshots taken mid-transition (0.15s) can show a stale toggle state; wait about 300ms.
   - Always pass an absolute output path to screenshot scripts. A missing env var once created an `undefined/` folder of screenshots that got committed. `tests/output/` is git-ignored.
@@ -151,5 +155,6 @@ Routing is hash-based: `#home`, `#md5`, `#qr`… Each tool is a `<section class=
 9. Collapsible group headings (sidebar and home), remembered per browser.
 10. System / Light / Dark theme switch (default System, no flash on load).
 11. Added README, this file and `tests/smoke.js`.
+12. New **Device** category with the GPS Location tool.
 
-Current version: **13** (see `sw.js`).
+Current version: **14** (see `sw.js`).

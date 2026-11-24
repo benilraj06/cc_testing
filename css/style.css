@@ -660,6 +660,8 @@ input[type="color"] { width: 48px; height: 42px; padding: 0; border: 1px solid v
 .qr-box canvas { display: block; width: 240px; max-width: 100%; height: auto; image-rendering: pixelated; }
 .qr-actions { justify-content: center; }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+a.btn { text-decoration: none; color: var(--text); }
+a.btn-primary { color: #fff; }
 /* Diff */
 .diff-out { white-space: pre-wrap; padding: 8px 0; }
 .diff-line { padding: 1px 14px 1px 0; }
@@ -685,6 +687,22 @@ input[type="color"] { width: 48px; height: 42px; padding: 0; border: 1px solid v
 .re-item-head code { font-family: var(--mono); overflow-wrap: anywhere; }
 .re-item .kv { margin-top: 6px; }
 .muted { color: var(--muted); }
+/* GPS */
+.gps-control { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.gps-state { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1 1 220px; }
+.gps-state-title { font-weight: 600; }
+.gps-dot { width: 12px; height: 12px; flex-shrink: 0; border-radius: 50%; background: var(--border); }
+.gps-dot.searching { background: #f59e0b; animation: gps-pulse 1.2s ease-in-out infinite; }
+.gps-dot.live { background: var(--success); box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 22%, transparent); }
+.gps-dot.error { background: var(--danger); }
+@keyframes gps-pulse { 50% { opacity: 0.35; } }
+.gps-heading-stat { display: flex; align-items: center; gap: 12px; }
+.gps-compass { width: 44px; height: 44px; flex-shrink: 0; }
+.gps-compass circle { fill: none; stroke: var(--border); stroke-width: 2; }
+.gps-compass text { font: 700 8px var(--font); fill: var(--muted); text-anchor: middle; dominant-baseline: middle; }
+.gps-compass path { fill: var(--border); transform-origin: 24px 24px; transition: transform 0.4s ease; }
+.gps-compass.on path { fill: var(--accent); }
+.copy-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
 /* ---------- Install popup ---------- */
 .install-sheet {
